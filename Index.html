@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCESCO CALCULATOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroon: {
+                            50: '#fdf2f2',
+                            100: '#fde8e8',
+                            200: '#fbd5d5',
+                            600: '#9b1c1c',
+                            800: '#800000', // Main Brand Color
+                            900: '#630000',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #333; }
+        
+        /* Brand Typography */
+        .brand-font { font-weight: 900; letter-spacing: -0.05em; text-transform: uppercase; }
+
+        /* Modern Cards */
+        .modern-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #f3f4f6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .modern-card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px -3px rgba(128, 0, 0, 0.1); 
+            border-color: #fde8e8;
+        }
+
+        /* Professional Loader */
+        .pro-loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #800000; /* Maroon */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .invest-highlight {
+            transition: all 0.5s ease;
+            transform: scale(1.1);
+            color: #800000 !important;
+        }
+
+        /* Toast Notification */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            background: #800000;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #9b1c1c;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Inputs */
+        input:focus, select:focus {
+            border-color: #800000 !important;
+            outline: none;
+            box-shadow: 0 0 0 1px #800000;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 pb-20">
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- ==================== CALCULATOR INTERFACE ==================== -->
+    <div id="plannerPage" class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-calculator text-maroon-800 text-2xl"></i>
+                    <span class="brand-font text-2xl text-gray-900 tracking-tighter">ACCESCO <span class="text-maroon-800">CALCULATOR</span></span>
+                </div>
+                <div class="text-xs font-bold bg-maroon-50 px-3 py-1 rounded-full text-maroon-800 border border-maroon-100">INDIA 2025</div>
+            </div>
+        </nav>
+
+        <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar: Controls -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <h2 class="text-xs font-bold text-maroon-800 uppercase mb-4 tracking-wider border-b border-gray-100 pb-2">Financial Setup</h2>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <label class="text-sm font-bold text-gray-600 mb-1 block">Total Monthly Income</label>
+                            <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 transition-colors">
+                                <span class="text-gray-500 font-bold mr-2">₹</span>
+                                <input type="number" id="incomeInput" class="bg-transparent w-full outline-none font-bold text-xl text-gray-900 placeholder-gray-300" placeholder="50000">
+                            </div>
+                            <p class="text-[10px] text-red-500 font-bold mt-1 hidden" id="incomeError">Minimum income ₹500 required.</p>
+                        </div>
+
+                        <!-- Rent Input -->
+                        <div>
+                            <label class="text-sm font-bold text-gray-600 mb-1 block">Fixed Rent / EMI</label>
+                            <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 transition-colors">
+                                <span class="text-gray-500 font-bold mr-2">₹</span>
+                                <input type="number" id="setupRentInput" class="bg-transparent w-full outline-none font-bold text-xl text-gray-900 placeholder-gray-300" placeholder="15000">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 mb-1 block">City</label>
+                                <input type="text" id="cityInput" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm font-semibold outline-none" placeholder="Mumbai">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 mb-1 block">Lifestyle</label>
+                                <select id="lifeStyle" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-2 py-2 text-sm font-semibold outline-none">
+                                    <option value="frugal">Student/Frugal</option>
+                                    <option value="middle" selected>Working Professional</option>
+                                    <option value="luxury">High Comfort</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Head Count Input -->
+                        <div>
+                            <label class="text-sm font-bold text-gray-600 mb-1 block">Household Size</label>
+                            <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 transition-colors">
+                                <i class="fa-solid fa-users text-maroon-800 mr-3"></i>
+                                <input type="number" id="headCountInput" class="bg-transparent w-full outline-none font-semibold text-gray-900" placeholder="1" value="1" min="1">
+                                <span class="text-xs font-bold text-gray-400">Person(s)</span>
+                            </div>
+                        </div>
+
+                        <!-- AI Logic Status Output -->
+                        <div id="logicStatus" class="hidden text-xs p-3 bg-maroon-50 rounded-lg text-maroon-900 font-medium border-l-4 border-maroon-800 leading-relaxed"></div>
+
+                        <button id="generateBtn" onclick="performSmartResearchAndCalc()" class="w-full bg-maroon-800 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-maroon-900 transition flex items-center justify-center gap-2">
+                            <span>CALCULATE PLAN</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        
+                        <button onclick="getAIAnalysis()" id="analyzeBtn" class="hidden w-full bg-white text-maroon-800 border border-maroon-200 py-3 rounded-xl font-bold text-sm shadow-sm hover:bg-maroon-50 transition">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> AI Audit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content: Dashboard -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <!-- Stats Bar -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-4">
+                    <div>
+                        <div class="text-xs text-gray-400 font-bold uppercase">Needs (Essentials)</div>
+                        <div class="text-2xl font-black text-gray-800" id="needsTotalDisp">₹0</div>
+                    </div>
+                    <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
+                    <div>
+                        <div class="text-xs text-gray-400 font-bold uppercase">Wants (Fun)</div>
+                        <div class="text-2xl font-black text-maroon-800" id="wantsTotalDisp">₹0</div>
+                    </div>
+                    <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
+                    <div>
+                        <div class="text-xs text-gray-400 font-bold uppercase">Savings (Wealth)</div>
+                        <div class="text-2xl font-black text-green-600" id="savingsTotalDisp">₹0</div>
+                    </div>
+                </div>
+
+                <!-- Visuals -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 h-64 flex justify-center items-center relative">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 h-64">
+                        <canvas id="breakdownChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Interactive Cards -->
+                <div id="breakdownCards" class="hidden grid grid-cols-1 md:grid-cols-3 gap-5">
+                    
+                    <!-- Card 1: Needs -->
+                    <div class="modern-card p-5 flex flex-col border-t-4 border-maroon-800">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-black text-lg text-gray-800">NEEDS</h3>
+                            <i class="fa-solid fa-house-chimney text-gray-400"></i>
+                        </div>
+                        <div class="space-y-3 flex-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">RENT</span>
+                                <div class="flex gap-2">
+                                    <input type="number" id="rentInput" oninput="autoBalanceInvest()" class="w-16 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">GROCERY</span>
+                                <div class="flex gap-2">
+                                    <input type="number" id="grocInput" oninput="autoBalanceInvest()" class="w-16 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">TRANSPORT</span>
+                                <input type="number" id="transInput" oninput="autoBalanceInvest()" class="w-20 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">BILLS</span>
+                                <input type="number" id="utilInput" oninput="autoBalanceInvest()" class="w-20 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Wants -->
+                    <div class="modern-card p-5 flex flex-col border-t-4 border-maroon-600">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-black text-lg text-maroon-800">WANTS</h3>
+                            <i class="fa-solid fa-bag-shopping text-maroon-400"></i>
+                        </div>
+                        <div class="space-y-3 flex-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">SHOPPING</span>
+                                <input type="number" id="shopInput" oninput="autoBalanceInvest()" class="w-20 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">DINING</span>
+                                <input type="number" id="dineInput" oninput="autoBalanceInvest()" class="w-20 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500">ENTERTAIN</span>
+                                <input type="number" id="hobInput" oninput="autoBalanceInvest()" class="w-20 text-right font-bold text-sm border-b border-gray-200 focus:border-maroon-800 outline-none">
+                            </div>
+                        </div>
+                        <button onclick="optimizeWants()" class="mt-4 w-full py-2 text-xs font-bold text-maroon-800 border border-maroon-200 rounded-lg hover:bg-maroon-50 transition">
+                            ✂️ Smart Cuts
+                        </button>
+                    </div>
+
+                    <!-- Card 3: Savings (Goal) -->
+                    <div class="modern-card p-5 flex flex-col relative overflow-hidden border-t-4 border-green-600">
+                        <div class="absolute top-0 right-0 bg-green-600 text-white text-[9px] font-black px-2 py-1 rounded-bl-lg">AUTO-FILL</div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-black text-lg text-green-700">SAVINGS</h3>
+                            <i class="fa-solid fa-piggy-bank text-green-500"></i>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center items-center my-2">
+                            <input type="number" id="invInput" readonly class="w-full text-center text-3xl font-black text-green-600 bg-transparent outline-none" value="0">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide mt-1">Monthly Surplus</span>
+                        </div>
+                        <div class="mt-auto pt-3 border-t border-gray-100">
+                            <input type="text" id="savingsGoal" placeholder="E.g. Buy a Car" class="w-full text-xs font-semibold bg-gray-50 border border-gray-200 rounded-lg p-2 mb-2 focus:border-green-500 outline-none">
+                            <button onclick="checkSavingsGoal()" class="w-full py-2 bg-green-700 text-white text-xs font-bold rounded-lg hover:bg-green-800 transition">
+                                🎯 Plan Goal
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Modal -->
+    <div id="genericAIModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] px-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl transform transition-all scale-100 max-h-[90vh] flex flex-col overflow-hidden border border-gray-100">
+            <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-maroon-50">
+                <h3 id="aiModalTitle" class="font-black text-lg text-maroon-900 flex items-center gap-2"></h3>
+                <button onclick="document.getElementById('genericAIModal').classList.add('hidden')" class="text-maroon-800 hover:text-red-600 text-xl">&times;</button>
+            </div>
+            <div id="aiModalContent" class="p-6 overflow-y-auto custom-scroll bg-white text-gray-800"></div>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; // Env key
+        let distributionChart, breakdownChart;
+        // Simple Cache
+        const apiCache = new Map();
+
+        window.onload = () => {
+            initCharts();
+        };
+
+        // --- UTILS: Toast & Loader ---
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            // For white/maroon theme, use white icon or specific shade
+            let icon = '<i class="fa-solid fa-circle-info text-white"></i>';
+            if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation text-red-200"></i>';
+            if (type === 'success') icon = '<i class="fa-solid fa-circle-check text-green-200"></i>';
+
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+            container.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            // Remove after delay
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- PLANNER LOGIC ---
+        function initCharts() {
+            const ctx1 = document.getElementById('distributionChart').getContext('2d');
+            const ctx2 = document.getElementById('breakdownChart').getContext('2d');
+            // White/Maroon Theme Chart Colors
+            distributionChart = new Chart(ctx1, {
+                type: 'doughnut',
+                data: { labels: ['Needs', 'Wants', 'Savings'], datasets: [{ data: [1,1,1], backgroundColor: ['#800000','#b91c1c','#16a34a'], borderWidth:0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, font: { family: 'Inter', weight: 'bold' }, color: '#333' } } }, cutout: '75%' }
+            });
+            breakdownChart = new Chart(ctx2, {
+                type: 'bar',
+                data: { labels: ['Rent', 'Groc', 'Trav', 'Fun', 'Save'], datasets: [{ label: '₹', data: [0,0,0,0,0], backgroundColor: '#800000', borderRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: {color:'#666'} }, x: { grid: { display: false }, ticks: {color:'#666'} } }, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // --- NEW: SMART RESEARCH & CALCULATION ENGINE ---
+        async function performSmartResearchAndCalc() {
+            const income = parseFloat(document.getElementById('incomeInput').value);
+            const setupRent = parseFloat(document.getElementById('setupRentInput').value) || 0;
+            const city = document.getElementById('cityInput').value;
+            const lifeStyle = document.getElementById('lifeStyle').value;
+            const members = parseInt(document.getElementById('headCountInput').value) || 1;
+            const errEl = document.getElementById('incomeError');
+            
+            // Requirement: Strict Minimum 500 Check
+            if(!income || income < 500) { 
+                errEl.classList.remove('hidden');
+                showToast("Income must be at least ₹500", "error");
+                return; 
+            }
+            errEl.classList.add('hidden');
+            if(!city) { showToast("Please enter a city!", "error"); return; }
+
+            const btn = document.getElementById('generateBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ANALYZING...`;
+            document.getElementById('logicStatus').classList.add('hidden');
+
+            // Define "Very Low" Threshold (e.g., 12000 INR total or low per capita)
+            const incomePerCapita = income / members;
+            const isVeryLowBudget = income < 12000 || incomePerCapita < 5000;
+
+            // --- CONSUMPTION-BASED MODEL (FALLBACK) ---
+            
+            // Base cost per head based on lifestyle (Monthly)
+            let baseFoodCost = 3000; // Middle
+            if(lifeStyle === 'frugal') baseFoodCost = 2500;
+            if(lifeStyle === 'luxury') baseFoodCost = 5000;
+
+            // Economy Scale Factor (1p=1, 2p=1.7, 3p=2.4, 4p=3.0, 5p=3.5)
+            // Formula: First person 100%, subsequent people 70%, 60%...
+            let scaleFactor = 1;
+            if (members > 1) scaleFactor += 0.7;
+            if (members > 2) scaleFactor += (members - 2) * 0.6;
+            
+            let idealGrocery = Math.floor(baseFoodCost * scaleFactor);
+            
+            // Same for Utilities
+            let baseUtil = 1000; // Middle
+            if(lifeStyle === 'frugal') baseUtil = 600;
+            if(lifeStyle === 'luxury') baseUtil = 2000;
+            // Utilities scale slower (housing fixed cost)
+            let utilScale = 1 + ((members-1) * 0.3); 
+            let idealUtility = Math.floor(baseUtil * utilScale);
+
+            // Transport
+            let baseTrans = 1500;
+            let transScale = members; // Linear-ish if everyone commutes, but let's assume slightly less
+            if(members > 2) transScale = members * 0.8; 
+            let idealTransport = Math.floor(baseTrans * transScale);
+
+            // Wants (Remaining Budget Allocation)
+            const disposable = Math.max(0, income - (setupRent > 0 ? setupRent : 0));
+            let remaining = disposable - (idealGrocery + idealUtility + idealTransport);
+            let shopping = 0, dining = 0, entertainment = 0;
+
+            if (remaining > 0) {
+                shopping = Math.floor(remaining * 0.2);
+                dining = Math.floor(remaining * 0.2);
+                entertainment = Math.floor(remaining * 0.1);
+            } else {
+                // Deficit mode: Scale down needs
+                let deficit = Math.abs(remaining);
+                // Scale down Grocery/Transport to fit if possible, but keep Rent fixed
+                let totalNeeds = idealGrocery + idealUtility + idealTransport;
+                let scaleDown = disposable / totalNeeds;
+                idealGrocery = Math.floor(idealGrocery * scaleDown);
+                idealUtility = Math.floor(idealUtility * scaleDown);
+                idealTransport = Math.floor(idealTransport * scaleDown);
+            }
+
+            let budget = {
+                rent: setupRent > 0 ? setupRent : Math.floor(income * 0.30), 
+                reasoning: `Budget tailored for ${lifeStyle} lifestyle with ${members} member(s) (AI Offline).`
+            };
+
+            // AI Research
+            let aiSuccess = false;
+            try {
+                const rentInstruction = setupRent > 0 ? `Rent is FIXED at ₹${setupRent}.` : `Estimate rent for ${city}.`;
+                const prompt = `Act as an Indian financial planner. Create a monthly budget for a family of ${members} in ${city} with Income ₹${income} and lifestyle '${lifeStyle}'.
+                ${rentInstruction}
+                CRITICAL INSTRUCTION:
+                1. **Prioritize Grocery & Utilities**: Allocate sufficient funds for ${members} people based on ${lifeStyle} habits.
+                2. **Wants Logic**: If 'Frugal', keep Wants low. If 'Luxury', allow higher Shopping/Dining.
+                3. **Hard Limits**: Total expenses <= Income.
+                
+                Return JSON: { 'rent': int, 'grocery': int, 'transport': int, 'utility': int, 'shopping': int, 'dining': int, 'entertainment': int, 'reasoning': "string" }`;
+
+                const data = await callGeminiJSON(prompt);
+                if(data && data.rent !== undefined) {
+                    budget = data;
+                    if (setupRent > 0) budget.rent = setupRent; 
+                    aiSuccess = true;
+                }
+            } catch(e) { 
+                console.error("AI Failed", e); 
+            }
+
+            if (!aiSuccess) {
+                showToast("⚠️ You are offline. A much more personal budget can be created when online.", "error");
+            }
+
+            // Final Safety Cap
+            let totalEx = budget.rent + budget.grocery + budget.transport + budget.utility + budget.shopping + budget.dining + budget.entertainment;
+            if (totalEx > income) {
+                // Cut wants
+                if(budget.shopping > 0) { budget.shopping = 0; totalEx = recalculateTotal(budget); }
+                if(totalEx > income && budget.dining > 0) { budget.dining = 0; totalEx = recalculateTotal(budget); }
+                if(totalEx > income && budget.entertainment > 0) { budget.entertainment = 0; totalEx = recalculateTotal(budget); }
+                
+                // Scale needs
+                if (totalEx > income) {
+                    const nonRentIncome = Math.max(0, income - budget.rent);
+                    const nonRentExpenses = totalEx - budget.rent;
+                    if(nonRentExpenses > 0) {
+                        const scale = nonRentIncome / nonRentExpenses;
+                        budget.grocery = Math.floor(budget.grocery * scale);
+                        budget.transport = Math.floor(budget.transport * scale);
+                        budget.utility = Math.floor(budget.utility * scale);
+                    }
+                    budget.reasoning += " [Auto-adjusted to fit income limit]";
+                }
+            }
+
+            // UI Updates
+            const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+            
+            set('rentInput', budget.rent);
+            set('grocInput', budget.grocery);
+            set('transInput', budget.transport);
+            set('utilInput', budget.utility);
+            set('shopInput', budget.shopping);
+            set('dineInput', budget.dining);
+            set('hobInput', budget.entertainment);
+
+            // Show Logic/Reasoning
+            const statusEl = document.getElementById('logicStatus');
+            statusEl.classList.remove('hidden');
+            statusEl.innerHTML = `<strong>AI Insight:</strong> ${budget.reasoning || "Budget optimized for your household size."}`;
+
+            document.getElementById('breakdownCards').classList.remove('hidden');
+            document.getElementById('analyzeBtn').classList.remove('hidden');
+
+            autoBalanceInvest(); // Updates charts and totals
+
+            btn.disabled = false;
+            btn.innerHTML = origText;
+        }
+
+        function recalculateTotal(b) {
+            return b.rent + b.grocery + b.transport + b.utility + b.shopping + b.dining + b.entertainment;
+        }
+
+        function autoBalanceInvest() {
+            const get = (id) => parseFloat(document.getElementById(id).value)||0;
+            const income = parseFloat(document.getElementById('incomeInput').value)||0;
+            
+            const rent=get('rentInput'), groc=get('grocInput'), trans=get('transInput'), util=get('utilInput');
+            const shop=get('shopInput'), dine=get('dineInput'), hob=get('hobInput');
+            
+            const expenses = rent+groc+trans+util+shop+dine+hob;
+            const invest = income - expenses;
+            
+            const invField = document.getElementById('invInput');
+            invField.value = invest;
+            
+            // Visual Feedback
+            invField.className = `w-full text-center text-3xl font-black outline-none bg-transparent ${invest<0 ? 'text-red-600' : 'text-green-600'} invest-highlight`;
+            setTimeout(()=>invField.classList.remove('invest-highlight'), 500);
+
+            // Update Text
+            document.getElementById('needsTotalDisp').innerText = '₹'+(rent+groc+trans+util).toLocaleString();
+            document.getElementById('wantsTotalDisp').innerText = '₹'+(shop+dine+hob).toLocaleString();
+            document.getElementById('savingsTotalDisp').innerText = '₹'+Math.max(0,invest).toLocaleString();
+
+            // Update Charts
+            distributionChart.data.datasets[0].data = [rent+groc+trans+util, shop+dine+hob, Math.max(0,invest)];
+            distributionChart.update();
+            breakdownChart.data.datasets[0].data = [rent, groc, trans, shop, Math.max(0,invest)];
+            breakdownChart.update();
+        }
+
+        // Placeholder for Mart function since we removed Mart HTML but might need function existence to prevent errors if invoked
+        function goToMart() { showToast("Accesco Mart functionality is not part of this standalone calculator.", "info"); }
+
+        // UPDATED: Robust Error Handling with Retry Logic & Caching
+        async function callGeminiJSON(prompt, useSearch = false) {
+            // Check cache first
+            if(apiCache.has(prompt)) {
+                console.log("Cache hit!");
+                return apiCache.get(prompt);
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
+            };
+            if (useSearch) payload.tools = [{ google_search: {} }];
+
+            async function attemptFetch(retries = 3, delay = 1000) {
+                try {
+                    const res = await fetch(url, { 
+                        method: 'POST', 
+                        headers: {'Content-Type':'application/json'}, 
+                        body: JSON.stringify(payload) 
+                    }); 
+
+                    if (!res.ok) {
+                        if ([400, 401, 403].includes(res.status)) {
+                            console.warn(`Gemini API Auth/Request Error: ${res.status}`);
+                            return null;
+                        }
+                        if (retries > 0) {
+                            await new Promise(r => setTimeout(r, delay));
+                            return attemptFetch(retries - 1, delay * 2);
+                        }
+                        return null;
+                    }
+
+                    const data = await res.json();
+                    if (!data.candidates || !data.candidates[0].content) return null;
+                    
+                    const text = data.candidates[0].content.parts[0].text;
+                    const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                    const parsed = JSON.parse(cleanText);
+                    
+                    // Store in cache
+                    apiCache.set(prompt, parsed);
+                    
+                    return parsed;
+                } catch(e) {
+                    if (retries > 0) {
+                        await new Promise(r => setTimeout(r, delay));
+                        return attemptFetch(retries - 1, delay * 2);
+                    }
+                    return null;
+                }
+            }
+
+            return attemptFetch();
+        }
+
+        // Modal & Professional Loader
+        function showModal(t) { 
+            const m = document.getElementById('genericAIModal'); 
+            const c = document.getElementById('aiModalContent'); 
+            document.getElementById('aiModalTitle').innerText = t; 
+            m.classList.remove('hidden'); 
+            
+            // Professional Loading Screen with cycling text
+            c.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-12">
+                    <div class="pro-loader mb-6"></div>
+                    <div id="loading-text" class="text-xs font-bold text-gray-400 tracking-widest uppercase">Initializing Analysis...</div>
+                </div>
+            `; 
+            
+            // Cycle texts
+            const texts = ["Scanning Financial Data...", "Optimizing Allocations...", "Checking Market Rates...", "Finalizing Report..."];
+            let i = 0;
+            const interval = setInterval(() => {
+                const el = document.getElementById('loading-text');
+                if(el) {
+                    el.innerText = texts[i % texts.length];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 800);
+
+            return c; 
+        }
+
+        async function checkSavingsGoal() { 
+            const g = document.getElementById('savingsGoal').value; if(!g) return showToast("Enter Goal!", "error");
+            const c = showModal("Vision Board");
+            const d = await callGeminiJSON(`Goal "${g}" with ₹${document.getElementById('invInput').value} savings. JSON: {title, months, total_cost_est, accelerator_tip, image_prompt, milestones:[str]}`);
+            if(d) c.innerHTML = `<div class="rounded-2xl overflow-hidden shadow-lg"><img src="https://image.pollinations.ai/prompt/${encodeURIComponent(d.image_prompt)}?width=600&height=300&nologo=true" class="w-full h-48 object-cover"><div class="p-5"><h2 class="text-2xl font-black mb-2">${d.title}</h2><div class="flex justify-between font-bold text-gray-500 text-sm mb-4"><span>Est: ${d.total_cost_est}</span><span>${d.months} Months</span></div><div class="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-400 text-sm mb-4">${d.accelerator_tip}</div><ul class="space-y-2 text-sm">${d.milestones.map((m,i)=>`<li class="flex gap-2"><span class="bg-gray-200 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">${i+1}</span>${m}</li>`).join('')}</ul></div></div>`;
+        }
+        
+        // ------------------- NEW AI FEATURE IMPLEMENTATIONS -------------------
+
+        async function getAIAnalysis() {
+            const income = document.getElementById('incomeInput').value;
+            const rent = document.getElementById('rentInput').value;
+            const groc = document.getElementById('grocInput').value;
+            const wants = document.getElementById('shopInput').value; 
+            const city = document.getElementById('cityInput').value;
+
+            const c = showModal("Financial Health Audit");
+            const prompt = `Analyze this monthly budget for someone in ${city} with Income ₹${income}: Rent ₹${rent}, Grocery ₹${groc}, Wants ₹${wants}. Provide a short, brutal financial health check.
+            Return JSON: { score: number(0-100), verdict: "string title", analysis_points: ["string", "string", "string"] }`;
+            
+            const data = await callGeminiJSON(prompt);
+            if(data) {
+                let color = data.score > 70 ? 'text-green-600' : (data.score > 40 ? 'text-orange-500' : 'text-red-600');
+                c.innerHTML = `
+                    <div class="text-center mb-6">
+                        <div class="text-6xl font-black ${color} mb-2">${data.score}</div>
+                        <div class="text-xl font-bold text-gray-800">${data.verdict}</div>
+                    </div>
+                    <div class="space-y-3">
+                        ${data.analysis_points.map(p => `<div class="bg-gray-50 p-3 rounded-lg border-l-4 ${data.score > 50 ? 'border-blue-500' : 'border-red-500'} text-sm text-gray-700">${p}</div>`).join('')}
+                    </div>
+                `;
+            } else { c.innerHTML = "AI is taking a nap. Try again."; }
+        }
+
+        async function optimizeWants() {
+            const shop = document.getElementById('shopInput').value;
+            const dine = document.getElementById('dineInput').value;
+            const hob = document.getElementById('hobInput').value;
+            const city = document.getElementById('cityInput').value;
+
+            const c = showModal("Smart Cuts Strategy");
+            const prompt = `Suggest 3 specific, actionable ways to cut costs for a person in ${city} spending: Shopping ₹${shop}, Dining ₹${dine}, Entertainment ₹${hob}.
+            Return JSON: { tips: [{ title: "string", saving_est: "string (e.g. ₹500/mo)", detail: "string" }] }`;
+
+            const data = await callGeminiJSON(prompt);
+            if(data) {
+                c.innerHTML = `<div class="space-y-4">
+                    ${data.tips.map(t => `
+                        <div class="flex gap-4 bg-white border border-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+                            <div class="bg-purple-100 text-purple-600 w-12 h-12 flex items-center justify-center rounded-full text-xl">✂️</div>
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-bold text-gray-800">${t.title}</h4>
+                                    <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded">Save ${t.saving_est}</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">${t.detail}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`;
+            } else { c.innerHTML = "AI couldn't find cuts. Maybe you're already frugal?"; }
+        }
+
+    </script>
+</body>
+</html>
