@@ -1,0 +1,1757 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ACCESCO </title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" href="images/accesco.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Poppins:wght@400;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- =================== CSS SECTION =================== -->
+  <style>
+
+    html{ 
+      scroll-behavior: smooth; 
+    }
+
+    :root {
+      --bg: #fff;
+      --muted: #8a8a8a;
+      --accent: #8b0a14;
+      --accent-2: #c03b3b;
+      --card: #fff;
+      --shadow: 0 18px 40px rgba(139, 10, 20, 0.08);
+      --container: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: #222;
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 14px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1100;
+      background: rgba(255, 255, 255, 0.249);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    }
+
+    .nav-inner {
+      max-width: var(--container);
+      margin: auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .brand .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--accent), #72000a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fff;
+      font-family: Poppins, sans-serif;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .nav-space {
+      flex: 1;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-outline {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 2px solid rgb(255, 51, 51);
+      color: red;
+      background: transparent;
+      font-weight: 600;
+    }
+
+    .btn-cta {
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    }
+
+    /* MOBILE NAV BUTTON */
+    .menu-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: #fff;
+    }
+
+    @media(max-width: 900px) {
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-outline,
+      .btn-cta {
+        display: none;
+      }
+    }
+
+    /* SIDEBAR */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      z-index: 1200;
+    }
+
+    .sidebar-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 280px;
+      background: #fff;
+      padding: 22px;
+      transform: translateX(-100%);
+      transition: 0.3s ease;
+      z-index: 1250;
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .side-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .side-list a {
+      padding: 12px 14px;
+      border-radius: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .side-list a.active {
+      background: rgba(203, 50, 50, 0.08);
+    }
+
+    /* ================= HERO WITH BACKGROUND IMAGE ================= */
+    .hero {
+      padding: 90px 20px;
+      position: relative;
+      background-image: url("images/hero image.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Soft overlay for readability */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(1.5px);
+      background: rgba(255, 255, 255, 0.42);
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      max-width: var(--container);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 34px;
+    }
+
+    .small-pill {
+      padding: 8px 16px;
+      font-size: 14px;
+      border: 1px solid rgba(139, 10, 20, 0.2);
+      background: rgba(139, 10, 20, 0.06);
+      color: var(--accent);
+      border-radius: 30px;
+      font-weight: 600;
+    }
+
+    .hero-title {
+      font-family: Poppins, sans-serif;
+      font-size: 64px;
+      margin-top: 18px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: rgb(64, 89, 85);
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cta-pill,
+    .cta-outline {
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .cta-pill {
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      color: #fff;
+    }
+
+    .cta-outline {
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+    }
+
+    .stats {
+      display: flex;
+      gap: 26px;
+      margin-top: 28px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stats small {
+      color: rgb(0, 0, 0);
+      font-size: 13px;
+      display: block;
+      font-weight: 400;
+    }
+
+    @media(max-width: 900px) {
+      .hero {
+        padding: 70px 20px;
+      }
+
+      .hero-title {
+        font-size: 42px;
+      }
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 60px 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      max-width: 700px;
+      margin: auto;
+      margin-bottom: 28px;
+    }
+
+    .small-upper {
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+      font-size: 13px;
+    }
+
+    .big-h {
+      font-family: Poppins, sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      margin: 10px 0;
+    }
+
+    .muted-center {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    /* SERVICE CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .card {
+      position: relative;
+      height: 260px;
+      padding: 24px;
+      border-radius: 18px;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .badge {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+    }
+
+    .learn {
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    @media(max-width: 900px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      display: flex;
+      gap: 16px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .f-icon {
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      width: 52px;
+      height: 52px;
+      color: #fff;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    @media(max-width: 900px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* RESOURCES */
+    .resource-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .resource {
+      padding: 22px;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.04);
+    }
+
+    @media(max-width: 900px) {
+      .resource-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* CTA */
+    .cta-large {
+      max-width: 1100px;
+      margin: auto;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff;
+      padding: 28px;
+      border-radius: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    @media(max-width: 900px) {
+      .cta-large {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+
+
+
+
+
+    /* FOOTER */
+    footer {
+      background: rgba(0, 0, 0, 0.92);
+      padding: 60px 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.07);
+    }
+
+    .footer-grid {
+      max-width: var(--container);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media(max-width: 900px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+
+    /* ABOUT SECTION GRID – image left, text right */
+    .about-grid {
+    max-width: var(--container);
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    }
+
+    @media(max-width: 900px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    }
+
+    /* GAMING ARENA SECTION */
+    /* ---- GLOBAL ---- */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fff7f5;
+  margin: 0;
+}
+
+/* ---- LAYOUT ---- */
+.gaming-arena {
+  display: flex;
+  justify-content: space-between;
+  padding: 70px 80px;
+  gap: 60px;
+}
+
+.gaming-arena .left {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ---- TAGS ---- */
+.tag {
+  padding: 8px 18px;
+  border-radius: 18px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.tag.red {
+  background: #ffe6e6;
+  color: #b5001f;
+}
+
+.tag.offer {
+  background: #b5001f;
+  color: white;
+  float: right;
+  margin-bottom: 15px;
+}
+
+/* ---- HEADING & TEXT ---- */
+.gaming-arena h1 {
+  font-size: 48px;         /* reduced for balance */
+  line-height: 1.2;
+  font-weight: 800;
+  color: #2d0100;
+  margin: 20px 0 15px;
+}
+
+.gaming-arena h1 span {
+  color: #b5001f;
+}
+
+.gaming-arena p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 17px;
+  max-width: 85%;
+}
+
+/* ---- FEATURE ROW ---- */
+.features {
+  display: flex;
+  gap: 20px;
+  margin: 35px 0;
+}
+
+.feature-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 7px rgba(0,0,0,0.08);
+  min-width: 160px;
+}
+
+.feature-box h4 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.feature-box p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #777;
+}
+
+.feature-box i {
+  font-size: 26px;
+  color: #b5001f;
+}
+
+/* ---- BUTTON ---- */
+.start-btn {
+  background: #b5001f;
+  color: #fff;
+  border: none;
+  padding: 16px 32px;
+  font-size: 17px;
+  border-radius: 14px;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.start-btn i {
+  font-size: 20px;
+}
+
+/* ---- RIGHT SIDE ---- */
+.gaming-arena .right {
+  width: 50%;
+  position: relative;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  background: #fff2ed;
+  border-radius: 30px;
+  padding: 40px 35px;
+  box-shadow: inset 0 0 20px #f5d6d6;
+}
+
+/* ---- GAME CARD ---- */
+.game-card {
+  background: white;
+  padding: 25px 22px;
+  border-radius: 22px;
+  text-align: left;
+  box-shadow: 0 2px 10px #ead7d7;
+  transition: transform .2s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+}
+
+.game-card img {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+.fallback-icon {
+  font-size: 48px;
+  color: #b5001f;
+  display: none;
+}
+
+.game-card h3 {
+  margin-top: 14px;
+  font-size: 19px;
+  color: #2d0100;
+  font-weight: 700;
+}
+
+.game-card p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 15px;
+}
+
+/* 📱 ---- RESPONSIVE RULES ---- */
+@media(max-width: 1100px) {
+  .gaming-arena {
+    flex-direction: column;
+    padding: 50px 40px;
+  }
+  .gaming-arena .left,
+  .gaming-arena .right {
+    width: 100%;
+  }
+  .gaming-arena h1 {
+    font-size: 42px;
+  }
+}
+
+@media(max-width: 750px) {
+  .game-grid {
+    grid-template-columns: 1fr;
+    padding: 30px 25px;
+  }
+
+  .features {
+    flex-direction: column;
+  }
+
+  .gaming-arena h1 {
+    font-size: 34px;
+  }
+
+  .gaming-arena p {
+    font-size: 16px;
+  }
+
+  .start-btn {
+    font-size: 16px;
+    padding: 14px 26px;
+  }
+}
+
+@media(max-width: 450px) {
+  .gaming-arena {
+    padding: 30px 18px;
+  }
+  .gaming-arena h1 {
+    font-size: 28px;
+  }
+  .game-card {
+    padding: 22px;
+  }
+  .game-card h3 {
+    font-size: 18px;
+  }
+}
+
+/* ===================== FIXED + IMPROVED GAMING ARENA ===================== */
+
+/* CONTAINER */
+.gaming-arena {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 80px 60px;
+  gap: 70px;
+}
+
+/* LEFT COLUMN */
+.gaming-arena .left {
+  flex: 1;
+  max-width: 480px;
+}
+
+/* TITLE */
+.gaming-arena h1 {
+  font-size: 50px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+/* TEXT */
+.gaming-arena p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin-top: 10px;
+  max-width: 92%;
+}
+
+/* FEATURES */
+.features {
+  display: flex;
+  gap: 18px;
+  margin: 35px 0;
+}
+
+.feature-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  width: 160px;
+}
+
+/* RIGHT COLUMN */
+.gaming-arena .right {
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* THE BOX WITH THE 4 GAME CARDS (shift right here) */
+.game-grid {
+  width: 85%;       /* SHIFT RIGHT */
+  max-width: 520px; /* Perfect desktop size */
+  background: #fff2ed;
+  padding: 40px 32px;
+  border-radius: 32px;
+  box-shadow: inset 0 0 24px #f4d7d7;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px;
+}
+
+/* GAME CARDS */
+.game-card {
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+}
+
+/* ICONS */
+.game-card img,
+.game-card .fallback-icon {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+/* TEXT */
+.game-card h3 {
+  font-size: 19px;
+  margin-top: 12px;
+}
+
+.game-card p {
+  font-size: 15px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* OFFER TAG FIX */
+.tag.offer {
+  margin-bottom: 18px;
+  margin-right: 20px;
+}
+
+/* ===================== MOBILE / TABLETS ===================== */
+
+@media(max-width: 1100px) {
+  .gaming-arena {
+    flex-direction: column;
+    padding: 50px 40px;
+  }
+
+  .gaming-arena .right {
+    width: 100%;
+    align-items: center;
+  }
+
+  .game-grid {
+    width: 100%;
+    max-width: 460px;
+  }
+}
+
+@media(max-width: 750px) {
+  .gaming-arena h1 {
+    font-size: 38px;
+  }
+
+  .game-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 30px 22px;
+  }
+
+  .features {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .start-btn {
+    font-size: 16px;
+  }
+}
+
+@media(max-width: 450px) {
+  .gaming-arena {
+    padding: 30px 20px;
+  }
+
+  .gaming-arena h1 {
+    font-size: 30px;
+  }
+
+  .game-card {
+    padding: 20px;
+  }
+
+  .game-card img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+
+/* ========================= NEW FULL-WIDTH SIDEBAR ========================= */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;                /* FULL WIDTH LIKE ADIDAS */
+  max-width: 100%;
+  background: #fff;
+  padding: 0;
+  transform: translateX(-100%);
+  transition: 0.3s ease;
+  z-index: 2000;
+  overflow-y: auto;
+}
+
+/* SIDEBAR OPEN STATE */
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* TOP BAR */
+.sidebar-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+.sidebar-logo {
+  width: 120px;
+  height: auto;
+}
+
+.sidebar-close {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* LABEL */
+.sidebar-label {
+  padding: 16px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #e53935;
+}
+
+/* MENU LINKS */
+.side-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-list li a {
+  display: flex;
+  justify-content: space-between; /* arrow on right */
+  align-items: center;
+  padding: 18px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #eee;
+}
+
+.side-list li a span {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* Remove old emoji spacing */
+.side-list li a::before {
+  display: none !important;
+}
+
+/* Mobile improvement */
+@media(max-width: 450px) {
+  .sidebar-logo {
+    width: 100px;
+  }
+
+  .side-list li a {
+    font-size: 15px;
+  }
+}
+
+/* ========== RESPONSIVE SIDEBAR WIDTH FIX ========== */
+
+/* DEFAULT: FULL WIDTH (for mobile/tablet) */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;          /* 100% for mobile/tablets */
+  background: #fff;
+  padding: 0;
+  transform: translateX(-100%);
+  transition: 0.3s ease;
+  z-index: 2000;
+  overflow-y: auto;
+}
+
+/* DESKTOP: ONLY 30% WIDTH */
+@media(min-width: 900px) {
+  .sidebar {
+    width: 30%;         /* DESKTOP WIDTH */
+    max-width: 420px;   /* prevents it from becoming too large on wide screens */
+    box-shadow: 0 0 40px rgba(0,0,0,0.15);
+  }
+}
+
+/* OPEN STATE */
+.sidebar.open {
+  transform: translateX(0);
+}
+
+
+/* FORCE SHOW Launch Tool button on all devices */
+.launch-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+
+/* Mobile layout improvement */
+@media(max-width: 900px) {
+  .launch-btn {
+    margin-top: 16px;
+    width: 100%;
+    max-width: 260px;
+    justify-content: center;
+  }
+}
+
+/* ================= MOBILE/TABLET — MAKE FEATURES 2×2 GRID ================= */
+@media(max-width: 750px) {
+  .features {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);  /* 2 columns */
+    gap: 14px;
+    width: 100%;
+  }
+
+  .feature-box {
+    width: 100%;
+    padding: 18px 16px;
+    border-radius: 16px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+
+  .feature-box h4 {
+    font-size: 15px;
+  }
+
+  .feature-box p {
+    font-size: 12px;
+  }
+}
+
+/* EXTRA — For very small screens */
+@media(max-width: 450px) {
+  .features {
+    gap: 12px;
+  }
+}
+
+  </style>
+
+
+
+</head>
+
+<body>
+
+
+  <!-- =================== SIDEBAR =================== -->
+  <div id="backdrop" class="sidebar-backdrop"></div>
+  <aside id="sidebar" class="sidebar">
+
+  <!-- TOP BAR INSIDE SIDEBAR -->
+  <div class="sidebar-top">
+      <img src="images/accesco.png" class="sidebar-logo">
+      <button id="closeSidebarBtn" class="sidebar-close">✕</button>
+  </div>
+
+  <!-- MENU LABEL -->
+  <div class="sidebar-label">MENU</div>
+
+  <!-- MENU ITEMS -->
+  <ul class="side-list">
+    <li><a href="#home">HOME <span>›</span></a></li>
+    <li><a href="#about">ABOUT <span>›</span></a></li>
+    <li><a href="#services">SERVICES <span>›</span></a></li>
+    <li><a href="#resources">RESOURCES <span>›</span></a></li>
+    <li><a href="#contact">CONTACT <span>›</span></a></li>
+  </ul>
+
+</aside>
+
+
+
+  <!-- =================== NAVBAR =================== -->
+  <header class="navbar" id="nav">
+    <div class="nav-inner">
+
+      <button class="menu-toggle" id="openMenu">☰</button>
+
+      <div class="brand" id="openSidebar">
+        <div class="logo"><img src="images/accesco.png"></div>
+        <h1>ACCESCO</h1>
+      </div>
+
+      <div class="nav-space"></div>
+
+      <div class="nav-actions">
+        <i id="userIcon" class="fa-regular fa-user" style="font-size:22px;cursor:pointer;"></i>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- =================== HERO =================== -->
+  <main id="home">
+    <section class="hero">
+      <div class="hero-grid">
+
+        <div class="hero-left">
+          <span class="small-pill">Welcome to the Future of Digital Services</span>
+
+          <h2 class="hero-title">
+            Transform Your Digital<br>Experience with <span style="color:var(--accent)">ACCESCO</span>
+          </h2>
+
+          <p class="hero-sub">
+            ACCESCO brings together digital services, intelligent tools, and lifestyle experiences into one unified
+            ecosystem — designed for simplicity, speed, and excellence.
+          </p>
+
+          <div class="hero-ctas">
+            <button class="cta-pill">Explore Services →</button>
+            <button class="cta-outline">Learn More</button>
+          </div>
+
+          <div class="stats">
+            <div>
+              500K+
+              <small>Active Users</small>
+            </div>
+            <div>
+              4.8/5
+              <small>User Rating</small>
+            </div>
+            <div>
+              24/7
+              <small>Support</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================== ABOUT =================== -->
+    <section id="about">
+      <div class="section-title">
+        <div class="small-upper">ABOUT ACCESCO</div>
+        <h3 class="big-h">Empowering Digital Excellence Since Day One</h3>
+        <p class="muted-center">
+          ACCESCO is a modern digital platform offering multi-category services across lifestyle, utilities,
+          shopping, community, and financial tools.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div>
+          <img src="images/teamwork.jpg" alt="About Image" style="height:100% ; object-fit:cover;border-radius:18px;box-shadow:var(--shadow)" />
+        </div>
+
+        <div>
+          <p style="color:var(--muted);font-size:16px;margin-bottom:18px">
+            Our mission is to empower users with seamless experiences, intuitive interfaces, and smart digital
+            solutions — all in one place.
+          </p>
+
+          <div class="features-grid" style="margin-top:0">
+            <div class="feature">
+              
+              <div>
+                <h4 style="color: maroon;">Innovation</h4>
+                <p>Cutting-edge solutions</p>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div>
+                <h4 style="color: maroon;">Trust</h4>
+                <p>Security first approach</p>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div>
+                <h4 style="color: maroon;">Excellence</h4>
+                <p>Premium quality</p>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div>
+                <h4 style="color: maroon;">Community</h4>
+                <p>User-centered design</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================== SERVICES =================== -->
+    <section id="services">
+      <div class="section-title">
+        <div class="small-upper">OUR SERVICES</div>
+        <h3 class="big-h">Everything You Need, All in One Place</h3>
+        <p class="muted-center">Explore our comprehensive suite of digital services.</p>
+      </div>
+
+      <div class="cards">
+
+        <div class="card" style="background-image:url('images/mart.jpg')">
+          <div class="badge">👜</div>
+          <div>
+            <h3>ACCESCO Mart</h3>
+            <p>Your daily essentials in one place</p>
+            <div class="learn">Learn More →</div>
+          </div>
+        </div>
+
+        <div class="card" style="background-image:url('images/hub.jpeg')">
+          <div class="badge">👥</div>
+          <div>
+            <h3>ACCESCO Hub</h3>
+            <p>Rent and lend seamlessly</p>
+            <div class="learn">Learn More →</div>
+          </div>
+        </div>
+
+        <div class="card" style="background-image:url('images/fashion.jpg')">
+          <div class="badge">👗</div>
+          <div>
+            <h3>ACCESCO Style</h3>
+            <p>Premium fashion, curated</p>
+            <div class="learn">Learn More →</div>
+          </div>
+        </div>
+
+        <div class="card" style="background-image:url('images/eat.jpg')">
+          <div class="badge">🍽️</div>
+          <div>
+            <h3>ACCESCO Eat</h3>
+            <p>Fast food delivery from your favorites</p>
+            <div class="learn">Learn More →</div>
+          </div>
+        </div>
+
+        <div class="card" style="background-image:url('images/dinout.jpg')">
+          <div class="badge">🏨</div>
+          <div>
+            <h3>ACCESCO Dineout</h3>
+            <p>Premium dining, simplified</p>
+            <div class="learn">Learn More →</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =================== GAMING ARENA =================== -->
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+<section class="gaming-arena">
+  <div class="left">
+    <span class="tag red"><i class="ri-gift-line"></i> Play & Win Rewards</span>
+
+    <h1>Accesco <span>Gaming Arena</span></h1>
+
+    <p>
+      Play exciting games and stand a chance to win lucky coupons! Use your rewards across 
+      all Accesco venture programs including Mart, Hub, Style, Eat, and Dineout.
+    </p>
+
+    <div class="features">
+      <div class="feature-box">
+        <i class="ri-gamepad-line"></i>
+        <div>
+          <h4>Fun Games</h4>
+          <p>Play Daily</p>
+        </div>
+      </div>
+
+      <div class="feature-box">
+        <i class="ri-gift-line"></i>
+        <div>
+          <h4>Win Coupons</h4>
+          <p>Exclusive Deals</p>
+        </div>
+      </div>
+
+      <div class="feature-box">
+        <i class="ri-trophy-line"></i>
+        <div>
+          <h4>Leaderboards</h4>
+          <p>Compete & Win</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="start-btn"><i class="ri-gamepad-line"></i> Start Playing Now</button>
+  </div>
+
+  <div class="right">
+
+    <span class="tag offer"><i class="ri-gift-2-line"></i> Win Up to 50% Off!</span>
+
+    <div class="game-grid">
+
+      <!-- CARD 1 -->
+      <div class="game-card">
+        <!-- Option A (Your real image) -->
+        <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <!-- Option B fallback icon -->
+        <i class="ri-loop-right-line fallback-icon"></i>
+
+        <h3>Spin & Win</h3>
+        <p>Daily spins</p>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="game-card">
+        <img src="images/quiz.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 64px;">
+        <i class="ri-target-line fallback-icon"></i>
+
+        <h3>Quiz Time</h3>
+        <p>Test knowledge</p>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="game-card">
+        <img src="img/cardmatch.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <i class="ri-shapes-line fallback-icon"></i>
+
+        <h3>Card Match</h3>
+        <p>Memory game</p>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="game-card">
+        <img src="images/dice.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 69px;">
+        <i class="ri-dice-line fallback-icon"></i>
+
+        <h3>Lucky Dice</h3>
+        <p>Roll to win</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+    <!-- =================== RESOURCES =================== -->
+    <section id="resources">
+      <div class="section-title">
+        <div class="small-upper">RESOURCES</div>
+        <h3 class="big-h">Learn, Grow, and Succeed</h3>
+        <p class="muted-center">
+          Access valuable resources to enhance your ACCESCO experience.
+        </p>
+      </div>
+
+      <div class="resource-row">
+
+        <div class="resource">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="f-icon">🏆</div>
+            <div>
+              <h4>Metrics & Certificates</h4>
+              <p style="color:var(--muted)">View achievements and milestones</p>
+              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="f-icon">🎥</div>
+            <div>
+              <h4>QTC Videos</h4>
+              <p style="color:var(--muted)">High-quality tutorials</p>
+              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="f-icon">📚</div>
+            <div>
+              <h4>Blogs</h4>
+              <p style="color:var(--muted)">Industry insights & updates</p>
+              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="f-icon">🎓</div>
+            <div>
+              <h4>Tutorials</h4>
+              <p style="color:var(--muted)">Step-by-step guides</p>
+              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================== CTA =================== -->
+    <section>
+      <div class="cta-large">
+        <div style="display:flex;gap:16px;align-items:center">
+          <div>
+            <div style="font-size:22px;font-weight:800">ACCESCO Calculator</div>
+            <div style="opacity:0.95;font-size:15px">Advanced metrics & computation tools for professional analysis</div>
+          </div>
+        </div>
+
+        <button class="btn-outline launch-btn" style="background:#fff;font-weight:700" onclick="window.location.href='calculator.html'">Launch Tool</button>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =================== FOOTER =================== -->
+  <footer id="contact">
+    <div class="footer-grid">
+
+      <div>
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="logo" style="width:44px;height:44px;font-size:18px"><img src="images/accesco.png"></div>
+          <div>
+            <div style="font-weight:800;color: white;">ACCESCO</div>
+            <div style="color:var(--muted);margin-top:6px">Empowering digital excellence through innovative solutions.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="color: white;">Company</h4>
+        <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:10px;font-size:smaller;">
+          <a href=""><li>About Us</li></a>
+          <a href=""><li>Contact Us</li></a>
+          <a href=""><li>Help & Support</li></a>
+          <a href=""><li>General Info</li></a>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="color: white;">Resources</h4>
+        <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:10px;font-size:smaller;">
+          <a href=""><li>Metrics & Certificates</li></a>
+          <a href=""><li>QTC Videos</li></a>
+          <a href=""><li>Blogs</li></a>
+          <a href=""><li>Tutorials</li></a>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="margin-top:40px;text-align:center;color:var(--muted);font-size:14px">
+      © 2025 ACCESCO — All rights reserved.
+    </div>
+  </footer>
+
+
+  <!-- ================= ACCOUNT POPUP ================= -->
+<div id="accountPopupBackdrop" class="acc-popup-backdrop"></div>
+
+<div id="accountPopup" class="acc-popup">
+    
+    <div class="acc-top">
+        <img src="images/accesco.png" class="acc-logo">
+        <button id="closeAccPopup" class="acc-close">✕</button>
+    </div>
+
+    <h2 class="acc-title">LOG IN OR SIGN UP</h2>
+
+    <p class="acc-sub">Enjoy members-only access to exclusive products, rewards, offers and more.</p>
+
+    <div class="acc-social">
+        <button><i class="fa-brands fa-apple"></i></button>
+        <button><i class="fa-brands fa-facebook"></i></button>
+        <button><i class="fa-brands fa-google"></i></button>
+    </div>
+
+    <input type="email" placeholder="EMAIL ADDRESS *" class="acc-input">
+
+    <label class="acc-check">
+        <input type="checkbox">
+        <span>I agree to receive personalised marketing messages from ACCESCO.</span>
+    </label>
+
+    <div class="acc-actions">
+        <button class="acc-btn primary">Sign In</button>
+        <button class="acc-btn secondary">Sign Up</button>
+    </div>
+
+</div>
+
+<style>
+
+/* ============= ACCOUNT POPUP STYLE ============= */
+
+.acc-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  display: none;
+  z-index: 2000;
+}
+
+.acc-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 360px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+  display: none;
+  z-index: 2050;
+}
+
+.acc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.acc-logo {
+  width: 120px;
+  border-radius: 0;
+}
+
+.acc-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.acc-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 20px 0 6px;
+}
+
+.acc-sub {
+  color: #444;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.acc-social {
+  display: flex;
+  gap: 10px;
+}
+
+.acc-social button {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 14px 0;
+  background: #fff;
+  border-radius: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.acc-input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.acc-check {
+  margin-top: 16px;
+  font-size: 13px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.acc-read {
+  margin-top: 6px;
+  display: inline-block;
+  font-size: 13px;
+  color: #000;
+  font-weight: 600;
+}
+
+.acc-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.acc-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.acc-btn.primary {
+  background: black;
+  color: #fff;
+}
+
+.acc-btn.secondary {
+  background: #f1f1f1;
+}
+
+@media(max-width: 420px) {
+  .acc-popup {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+
+.footer-grid a:hover {
+  color: rgba(255, 0, 0, 0.566);
+}
+
+</style>
+
+<!-- ================= ACCOUNT POPUP SCRIPT ================= -->
+
+<script>
+const userIcon = document.getElementById("userIcon");
+const accPopup = document.getElementById("accountPopup");
+const accBackdrop = document.getElementById("accountPopupBackdrop");
+const accClose = document.getElementById("closeAccPopup");
+
+
+function openAccPopup() {
+  accPopup.style.display = "block";
+  accBackdrop.style.display = "block";
+}
+
+function closeAccPopupFn() {
+  accPopup.style.display = "none";
+  accBackdrop.style.display = "none";
+}
+
+userIcon.onclick = openAccPopup;
+accClose.onclick = closeAccPopupFn;
+accBackdrop.onclick = closeAccPopupFn;
+
+
+
+</script>
+
+
+
+
+  <!-- =================== JS SECTION =================== -->
+  <script>
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("backdrop");
+
+    const openSidebar = () => {
+      sidebar.classList.add("open");
+      backdrop.classList.add("open");
+    };
+
+    const closeSidebar = () => {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("open");
+    };
+
+    document.getElementById("openSidebar").onclick = openSidebar;
+    document.getElementById("openMenu").onclick = openSidebar;
+    document.getElementById("closeSidebarBtn").onclick = closeSidebar;
+    backdrop.onclick = closeSidebar;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeSidebar();
+    });
+  </script>
+
+  <script>
+  // Close sidebar on link click
+  document.querySelectorAll(".side-list a").forEach(link => {
+    link.addEventListener("click", () => {
+      closeSidebar();       // uses your existing function
+    });
+  });
+</script>
+
+
+
+
+</body>
+
+</html>
