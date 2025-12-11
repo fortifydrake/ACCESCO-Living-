@@ -53,16 +53,19 @@
       height: auto;
       display: block;
       border-radius: 14px;
-    }
+    } 
 
     /* NAVBAR */
     .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1100;
-      background: rgba(255, 255, 255, 0.249);
+      position: fixed; 
+      top: 6px ;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50px; /* removes curved white space */
+      background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(6px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      z-index: 999;
     }
 
     .nav-inner {
@@ -85,7 +88,7 @@
       width: 43px;
       height: 43px;
       border-radius: 15px;
-      background: linear-gradient(180deg, var(--accent), #72000a);
+      background: linear-gradient(180deg, var(--accent), );
       display: flex;
       align-items: center;
       justify-content: center;
@@ -129,7 +132,9 @@
 
     /* MOBILE NAV BUTTON */
     .menu-toggle {
-      display: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 40px;
       height: 40px;
       border-radius: 10px;
@@ -138,11 +143,6 @@
     }
 
     @media(max-width: 900px) {
-      .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
 
       .btn-outline,
       .btn-cta {
@@ -200,13 +200,18 @@
       align-items: center;
     }
 
+    .side-list a:active {
+      color :red;
+      font-weight: 900;
+    } 
+
     .side-list a.active {
       background: rgba(203, 50, 50, 0.08);
     }
 
     /* ================= HERO WITH BACKGROUND IMAGE ================= */
     .hero {
-      padding: 90px 20px;
+      padding: 40px 20px;
       position: relative;
       background-image: url("images/hero image.png");
       background-size: cover;
@@ -354,21 +359,36 @@
 
     .card {
       position: relative;
-      height: 260px;
+      height: 220px;
       padding: 24px;
       border-radius: 18px;
       display: flex;
       align-items: flex-end;
-      color: #fff;
+      color: #ffffff;
       background-size: cover;
       background-position: center;
     }
 
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(65, 11, 15, 0.623); /* transparent red layer */
+      border-radius: 18px;
+      z-index: 1;
+    }
+
+    .card > * {
+      position: relative;
+      z-index: 2; /* text above overlay */
+    }
+
+
     .badge {
       position: absolute;
       top: 18px;
-      left: 18px;
-      background: rgba(255, 255, 255, 0.15);
+      left: 48px;
+      background: rgba(255, 255, 255, 0);
       border-radius: 12px;
       width: 52px;
       height: 52px;
@@ -410,17 +430,6 @@
       box-shadow: 0 14px 40px rgba(0, 0, 0, 0.05);
     }
 
-    .f-icon {
-      background: linear-gradient(180deg, var(--accent), var(--accent-2));
-      width: 52px;
-      height: 52px;
-      color: #fff;
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 700;
-    }
 
     @media(max-width: 900px) {
       .features-grid {
@@ -1163,7 +1172,7 @@ body {
           </p>
 
           <div class="hero-ctas">
-            <button class="cta-pill">Explore Services →</button>
+            <button class="cta-pill" >Explore Services →</button>
             <button class="cta-outline">Learn More</button>
           </div>
 
@@ -1256,47 +1265,47 @@ body {
       <div class="cards">
 
         <div class="card" style="background-image:url('images/mart.jpg')">
-          <div class="badge">👜</div>
+          <div class="badge"> <h3 style="color: rgb(255, 0, 221)">Gromart</h3> </div>
           <div>
-            <h3>ACCESCO Mart</h3>
-            <p>Your daily essentials in one place</p>
-            <div class="learn">Learn More →</div>
+           
+            <p style="color: rgb(255, 255, 163);">Eat Right. Live Better. </p>
+            <div class="learn">→</div>
           </div>
         </div>
 
         <div class="card" style="background-image:url('images/hub.jpeg')">
-          <div class="badge">👥</div>
+          <div class="badge"><h3 style="color: rgb(255, 0, 221)">Vault</h3></div>
           <div>
-            <h3>ACCESCO Hub</h3>
-            <p>Rent and lend seamlessly</p>
-            <div class="learn">Learn More →</div>
+            
+            <p style="color: rgb(255, 255, 163);" > Why Buy? Just Accesco.</p>
+            <div class="learn">→</div>
           </div>
         </div>
 
         <div class="card" style="background-image:url('images/fashion.jpg')">
-          <div class="badge">👗</div>
+          <div class="badge"><h3 style="color: rgb(255, 0, 221)">InstaStyle</h3></div>
           <div>
-            <h3>ACCESCO Style</h3>
-            <p>Premium fashion, curated</p>
-            <div class="learn">Learn More →</div>
+            
+            <p style="color: rgb(255, 255, 163);"> Instant style, zero guesswork</p>
+            <div class="learn">→</div>
           </div>
         </div>
 
         <div class="card" style="background-image:url('images/eat.jpg')">
-          <div class="badge">🍽️</div>
+          <div class="badge"><h3 style="color: rgb(255, 0, 221)">EatFeast</h3></div>
           <div>
-            <h3>ACCESCO Eat</h3>
-            <p>Fast food delivery from your favorites</p>
-            <div class="learn">Learn More →</div>
+            
+            <p style="color: rgb(255, 255, 163);">Food Delivered with precision.</p>
+            <div class="learn">→</div>
           </div>
         </div>
 
         <div class="card" style="background-image:url('images/dinout.jpg')">
-          <div class="badge">🏨</div>
+          <div class="badge"><h3 style="color: rgb(255, 0, 221)">Dineout</h3></div>
           <div>
-            <h3>ACCESCO Dineout</h3>
-            <p>Premium dining, simplified</p>
-            <div class="learn">Learn More →</div>
+            
+            <p style="color: rgb(255, 255, 163);">Table ready before you are.</p>
+            <div class="learn">→</div>
           </div>
         </div>
       </div>
@@ -1311,7 +1320,7 @@ body {
   <div class="left">
     <span class="tag red"><i class="ri-gift-line"></i> Play & Win Rewards</span>
 
-    <h1>Accesco <span>Gaming Arena</span></h1>
+    <h1>Reward Play <span> Arena</span></h1>
 
     <p>
       Play exciting games and stand a chance to win lucky coupons! Use your rewards across 
@@ -1411,44 +1420,44 @@ body {
 
         <div class="resource">
           <div style="display:flex;gap:12px;align-items:center">
-            <div class="f-icon">🏆</div>
+            
             <div>
-              <h4>Metrics & Certificates</h4>
+              <h3 style="color: red ;">Metrics & Certificates</h3>
               <p style="color:var(--muted)">View achievements and milestones</p>
-              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+              <div class="resource-arrow"> →</div>
             </div>
           </div>
         </div>
 
         <div class="resource">
           <div style="display:flex;gap:12px;align-items:center">
-            <div class="f-icon">🎥</div>
+            
             <div>
-              <h4>QTC Videos</h4>
+              <h3 style="color: red ;">QTC Videos</h3>
               <p style="color:var(--muted)">High-quality tutorials</p>
-              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+              <div class="resource-arrow"> →</div>
             </div>
           </div>
         </div>
 
         <div class="resource">
           <div style="display:flex;gap:12px;align-items:center">
-            <div class="f-icon">📚</div>
+
             <div>
-              <h4>Blogs</h4>
+              <h3 style="color: red ;">Blogs</h3>
               <p style="color:var(--muted)">Industry insights & updates</p>
-              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+              <div class="resource-arrow"> →</div>
             </div>
           </div>
         </div>
 
         <div class="resource">
           <div style="display:flex;gap:12px;align-items:center">
-            <div class="f-icon">🎓</div>
+
             <div>
-              <h4>Tutorials</h4>
+              <h3 style="color: red ;">Tutorials</h3>
               <p style="color:var(--muted)">Step-by-step guides</p>
-              <div style="margin-top:8px;color:var(--accent);font-weight:700">Explore →</div>
+              <div class="resource-arrow"> →</div>
             </div>
           </div>
         </div>
@@ -1456,14 +1465,58 @@ body {
       </div>
     </section>
 
+    <style>
+      /* ARROW BASE STYLE */
+    .resource-arrow {
+      display: inline-block;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 8px;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    /* HOVER: Slight slide to the right */
+    .resource-arrow:hover {
+      transform: translateX(6px);
+    }
+
+    /* CLICK ANIMATION — bullet fast movement */
+    .resource-arrow.shoot {
+      animation: shootRight 0.35s ease-out;
+    }
+
+    @keyframes shootRight {
+      0% { transform: translateX(0); }
+      40% { transform: translateX(14px); }
+      100% { transform: translateX(0); }
+    }
+
+    </style>
+
+    <script>
+      document.querySelectorAll(".resource-arrow").forEach(arrow => {
+        arrow.addEventListener("click", () => {
+          arrow.classList.add("shoot");
+
+          // Remove class after animation ends so it can repeat on next click
+          setTimeout(() => {
+            arrow.classList.remove("shoot");
+          }, 350);
+        });
+      });
+      </script>
+
+
 
     <!-- =================== CTA =================== -->
     <section>
       <div class="cta-large">
         <div style="display:flex;gap:16px;align-items:center">
           <div>
-            <div style="font-size:22px;font-weight:800">ACCESCO Calculator</div>
-            <div style="opacity:0.95;font-size:15px">Advanced metrics & computation tools for professional analysis</div>
+            <div style="font-size:22px;font-weight:800">CalcIQ</div>
+            <div style="opacity:0.95;font-size:15px"> The Brain behind budget. </div>
           </div>
         </div>
 
@@ -1730,7 +1783,6 @@ accBackdrop.onclick = closeAccPopupFn;
       backdrop.classList.remove("open");
     };
 
-    document.getElementById("openSidebar").onclick = openSidebar;
     document.getElementById("openMenu").onclick = openSidebar;
     document.getElementById("closeSidebarBtn").onclick = closeSidebar;
     backdrop.onclick = closeSidebar;
