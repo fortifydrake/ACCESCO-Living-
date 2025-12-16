@@ -2114,7 +2114,26 @@ accBackdrop.onclick = closeAccPopupFn;
   });
 </script>
 
+<style>
+  df-messenger {
+    --df-messenger-bot-message: #f3f4f6;
+    --df-messenger-user-message: #2563eb;
+    --df-messenger-button-titlebar-color: #111827;
+    --df-messenger-chat-background-color: #ffffff;
+    --df-messenger-font-color: #000;
+  }
+</style>
 
+
+<!-- Dialogflow Messenger -->
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+<df-messenger
+  intent="WELCOME"
+  chat-title="Accesco Assistant"
+  agent-id="8beafa4a-339b-44ff-a386-62d386a2481b"
+  language-code="en">
+</df-messenger>
 
 
 </body>
